@@ -1,0 +1,59 @@
+import random
+
+# Function to determine the outcome of the clash
+def determine_winner(player_choice, opponent_choice):
+    if player_choice == opponent_choice:
+        return "Draw"
+    elif (player_choice == "Fire" and opponent_choice == "Earth") or \
+         (player_choice == "Water" and opponent_choice == "Fire") or \
+         (player_choice == "Earth" and opponent_choice == "Water"):
+        return "Player wins"
+    else:
+        return "Opponent wins"
+
+# Function to calculate damage based on choices
+def calculate_damage(winner, player_choice, opponent_choice):
+    if winner == "Player wins":
+        if player_choice == "Fire":
+            return 3 if opponent_choice == "Earth" else 1
+        elif player_choice == "Water":
+            return 3 if opponent_choice == "Fire" else 1
+        elif player_choice == "Earth":
+            return 3 if opponent_choice == "Water" else 1
+    return 0
+
+# Main game loop
+player_energy = 10
+opponent_energy = 10
+
+while player_energy > 0 and opponent_energy > 0:
+    print(f"Player energy: {player_energy}")
+    print(f"Opponent energy: {opponent_energy}")
+    
+    player_choice = input("Choose your element (Fire, Water, Earth): ").capitalize()
+    if player_choice not in ["Fire", "Water", "Earth"]:
+        print("Invalid choice! Please choose from Fire, Water, or Earth.")
+        continue
+    
+    opponent_choice = random.choice(["Fire", "Water", "Earth"])
+    print(f"Opponent chooses {opponent_choice}")
+    
+    winner = determine_winner(player_choice, opponent_choice)
+    print(f"{winner}!")
+    
+    damage = calculate_damage(winner, player_choice, opponent_choice)
+    if winner != "Draw":
+        if winner == "Player wins":
+            opponent_energy -= damage
+        else:
+            player_energy -= damage
+    
+    print(f"Player energy after clash: {player_energy}")
+    print(f"Opponent energy after clash: {opponent_energy}")
+    print("-------------------------")
+
+# Determine the winner of the game
+if player_energy <= 0:
+    print("You lose! Game over.")
+elif opponent_energy <= 0:
+    print("Congratulations! You win!")
